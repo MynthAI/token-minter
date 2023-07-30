@@ -14,7 +14,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const expiresIn = 200000; // About 3 minutes
 
-const loadLucid = async (seed: string, blockfrostApiKey: string) => {
+const loadLucid = async (wallet: string, blockfrostApiKey: string) => {
   const network = blockfrostApiKey.substring(0, 7);
   invariant(network);
   const lucid = await Lucid.new(
@@ -25,7 +25,11 @@ const loadLucid = async (seed: string, blockfrostApiKey: string) => {
     (network.charAt(0).toUpperCase() + network.slice(1)) as Network
   );
 
-  lucid.selectWalletFromSeed(seed);
+  if (wallet.includes(" ")) {
+    lucid.selectWalletFromSeed(wallet);
+  } else {
+    lucid.selectWalletFromPrivateKey(wallet);
+  }
   return lucid;
 };
 
@@ -53,10 +57,13 @@ interface Config {
 }
 
 const mint = async (config: Config, dryrun: boolean = true) => {
-  console.log("Loading minter wallet");
+  console.log("Loading wallets");
   const minter = await loadLucid(config.minterSeed, config.blockfrostApiKey);
+  const ownerKey = minter.utils.generatePrivateKey();
+  const owner = await loadLucid(ownerKey, config.blockfrostApiKey);
+
   const [address, utxos] = await Promise.all([
-    minter.wallet.address(),
+    owner.wallet.address(),
     minter.wallet.getUtxos(),
   ]);
 
@@ -65,10 +72,10 @@ const mint = async (config: Config, dryrun: boolean = true) => {
   console.debug("Creating minting policy");
   const mintingPolicy = loadMintingPolicy();
   invariant(mintingPolicy.scripts, "Minting policy is invalid");
-  const minterHash = getKeyHash(minter, address);
+  const ownerHash = getKeyHash(owner, address);
   const expiration = minter.utils.unixTimeToSlot(Date.now() + expiresIn);
   mintingPolicy.scripts[0].slot = expiration;
-  mintingPolicy.scripts[1].keyHash = minterHash;
+  mintingPolicy.scripts[1].keyHash = ownerHash;
   const script = minter.utils.nativeScriptFromJson(mintingPolicy);
   const policyId = minter.utils.mintingPolicyToId(script);
   const unit = policyId + fromText(config.token.name);
@@ -78,11 +85,14 @@ const mint = async (config: Config, dryrun: boolean = true) => {
     .newTx()
     .mintAssets({ [unit]: config.token.amount })
     .validTo(Date.now() + expiresIn)
+    .addSignerKey(ownerHash)
     .attachMintingPolicy(script)
     .complete();
 
-  const signedTx = await tx.sign().complete();
+  const signedTx = await tx.signWithPrivateKey(ownerKey).sign().complete();
+
   if (dryrun === false) await signedTx.submit();
+
   console.debug("Minted token with policy ID", policyId);
   return policyId;
 };
