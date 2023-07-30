@@ -12,6 +12,8 @@ import invariant from "tiny-invariant";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
+const expiresIn = 200000; // About 3 minutes
+
 const loadLucid = async (seed: string, blockfrostApiKey: string) => {
   const network = blockfrostApiKey.substring(0, 7);
   invariant(network);
@@ -64,22 +66,24 @@ const mint = async (config: Config) => {
   const mintingPolicy = loadMintingPolicy();
   invariant(mintingPolicy.scripts, "Minting policy is invalid");
   const minterHash = getKeyHash(minter, address);
-  const expiration = minter.utils.unixTimeToSlot(Date.now() + 60);
+  const expiration = minter.utils.unixTimeToSlot(Date.now() + expiresIn);
   mintingPolicy.scripts[0].slot = expiration;
   mintingPolicy.scripts[1].keyHash = minterHash;
   const script = minter.utils.nativeScriptFromJson(mintingPolicy);
   const policyId = minter.utils.mintingPolicyToId(script);
   const unit = policyId + fromText(config.token.name);
 
+  console.debug("Building transaction");
   const tx = await minter
     .newTx()
     .mintAssets({ [unit]: config.token.amount })
-    .validTo(Date.now() + 200000)
+    .validTo(Date.now() + expiresIn)
     .attachMintingPolicy(script)
     .complete();
 
   const signedTx = await tx.sign().complete();
   await signedTx.submit();
+  console.debug("Minted token with policy ID", policyId);
   return policyId;
 };
 
