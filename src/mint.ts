@@ -1,5 +1,6 @@
 import fs from "fs";
-import path from "path";
+import path, { dirname } from "path";
+import { fileURLToPath } from "url";
 import {
   Blockfrost,
   fromText,
@@ -8,6 +9,8 @@ import {
   Network,
 } from "lucid-cardano";
 import invariant from "tiny-invariant";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const loadLucid = async (seed: string, blockfrostApiKey: string) => {
   const network = blockfrostApiKey.substring(0, 7);
