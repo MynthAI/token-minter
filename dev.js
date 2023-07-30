@@ -41,7 +41,6 @@ const runIndex = () => {
 };
 
 const runTests = () => {
-  console.log("runtests");
   const command = "npx";
   const args = ["ava"];
 
