@@ -1,0 +1,58 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    concurrency: cardano-preview
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.16.1
+
+      - name: Update npm
+        run: npm install -g npm@9.7.2
+
+      - name: Install dependencies
+        run: npm ci --include dev
+
+      - name: Inject secrets
+        run: |
+          sed -i "s|{{ vault('token-minter/blockfrost').api_key }}|$BLOCKFROST_KEY|g" config/local.yml.j2
+          sed -i "s|{{ vault('token-minter/wallets').minter }}|$WALLET_SEED|g" config/local.yml.j2
+          mv config/local.yml.j2 config/local.yml
+        env:
+          BLOCKFROST_KEY: ${{ secrets.BLOCKFROST_PREVIEW_KEY }}
+          WALLET_SEED: ${{ secrets.INTEGRATION_WALLET }}
+
+      - name: Run tests
+        run: npx ava
+
+  lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.16.1
+
+      - name: Install dependencies
+        run: npm install --include dev
+
+      - name: Lint
+        run: npm run lint
