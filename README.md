@@ -1,50 +1,72 @@
-# Mynth Token Minting
+# Token Minting
 
-This project includes a set of bash scripts that use `cardano-cli` to
-mint the Mynth Token, a Cardano native token. These scripts automate the
-token minting process.
+This project includes a tool to mint Cardano native tokens. It utilizes
+[Blockfrost](https://blockfrost.io/) and
+[Lucid](https://lucid.spacebudz.io/) to interact with the blockchain.
 
 ## Prerequisites
 
-  - Installed and configured Cardano node and cardano-cli
+  - Node.js (v18.16.1)
+  - npm (v9.7.2 or later)
 
-## Quick Start
+## Development
 
-1.  Mint the token:
-    
-        bash mint.sh
+Install dependencies using `npm`:
 
-2.  Send ADA (e.g., 20) to the address displayed by the script.
+``` bash
+npm install
+```
 
-3.  After funding the wallet with ADA, run `mint.sh` again:
-    
-        bash mint.sh
+### Run locally
 
-4.  Enter “MINT” and press enter to mint the token.
+Call the following to simulate the minting process:
 
-5.  After the token is minted, you can send it to another wallet using
-    `send.sh`:
-    
-        bash send.sh [DESTINATION]
+``` bash
+npm run start
+```
 
-6.  When the token is ready, register it with the [Cardano Off-Chain
-    Metadata
-    Registry](https://github.com/cardano-foundation/cardano-token-registry)
-    using `register.sh`:
-    
-        bash register.sh
+This will build a transaction to mint a token but will not submit it to
+the blockchain.
 
-7.  Copy or move the output JSON file to the cardano-token-registry
-    repository and follow their steps to submit the registration.
+### Vault
 
-## Scripts
+This project uses Vault for secret storage. Secrets are stored under the
+path `cardano-monitor`. To activate this path in your
+[local-vault](https://github.com/MynthAI/local-vault) instance, execute
+the following command:
 
-  - `mint.sh`: Main script for minting tokens
-  - `send.sh`: Sends minted tokens to a destination wallet
-  - `register.sh`: Generates the metadata registration file
+``` bash
+docker exec vault vault secrets enable -path=cardano-monitor -version=1 kv
+```
+
+### Blockfrost
+
+This project utilizes the [Blockfrost API](https://blockfrost.dev/) to
+interact with the Cardano blockchain. To enable the application to
+access your Blockfrost API key, it must be stored in Vault. Within your
+Blockfrost account, you should possess two API keys: one for the mainnet
+and another for preview. The Token Minter depends on the preview key.
+Here’s the method to save it to Vault:
+
+``` bash
+vault-cli set -p token-minter/blockfrost api_key
+```
+
+### Minting Wallet
+
+This project utilizes a Cardano wallet to mint tokens. To be able to
+mint tokens, you must store the wallet seed phrase in Vault. For testing
+purposes, you can generate your own seed phrase and fund it using
+[testnets
+faucet](https://docs.cardano.org/cardano-testnet/tools/faucet/). Here’s
+the method to save it to Vault:
+
+``` bash
+vault-cli set -p token-minter/wallet minter
+```
 
 ## Configuring the Token
 
-This repository is set up to mint the Mynth Token. You can configure the
-token to mint by modifying the `metadata.yaml` file. Update the details
-in this file to change the token you want to mint.
+This repository allows minting of any token. You can configure what
+token to mint by modifying the `config/default.yml` file. Update the
+details in this file to change the token you want to mint.
