@@ -11,7 +11,8 @@ const run = async () => {
     },
   };
 
-  await mint(params);
+  const shouldMint = process.argv.includes("--mint");
+  await mint(params, !shouldMint);
 };
 
 run();

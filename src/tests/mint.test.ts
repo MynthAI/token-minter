@@ -43,7 +43,7 @@ test("successfully mints a token", async (t) => {
   };
 
   t.timeout(120000);
-  const policyId = await mint(params);
+  const policyId = await mint(params, false);
 
   const token = await getAsset(
     params.blockfrostApiKey,
