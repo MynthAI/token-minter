@@ -5,9 +5,7 @@ let childProcess;
 
 const run = () => {
   const command = "vault-cli";
-  const args = process.argv.includes("--test")
-    ? ["template", "config/test.yml.j2"]
-    : ["template", "config/local.yml.j2"];
+  const args = ["template", "config/local.yml.j2"];
 
   const vaultProcess = spawn(command, args);
 
