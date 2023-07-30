@@ -80,4 +80,7 @@ const mint = async (config: Config) => {
 
   const signedTx = await tx.sign().complete();
   await signedTx.submit();
+  return policyId;
 };
+
+export { mint };

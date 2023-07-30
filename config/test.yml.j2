@@ -1,1 +1,3 @@
-test: true
+blockfrost: "{{ vault('token-minter/blockfrost').api_key }}"
+wallets:
+  minter: "{{ vault('token-minter/tests/wallets').minter }}"
