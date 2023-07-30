@@ -38,7 +38,7 @@ jobs:
       - name: Create fake vault-cli
         run: |
           echo "#!/bin/bash" > /usr/local/bin/vault-cli
-          echo "cat config/local.yml >> /usr/local/bin/vault-cli
+          echo "cat config/local.yml" >> /usr/local/bin/vault-cli
           chmod +x /usr/local/bin/vault-cli
 
       - name: Run tests
