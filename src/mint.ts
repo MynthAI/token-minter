@@ -52,7 +52,7 @@ interface Config {
   };
 }
 
-const mint = async (config: Config) => {
+const mint = async (config: Config, dryrun: boolean = true) => {
   console.log("Loading minter wallet");
   const minter = await loadLucid(config.minterSeed, config.blockfrostApiKey);
   const [address, utxos] = await Promise.all([
@@ -82,7 +82,7 @@ const mint = async (config: Config) => {
     .complete();
 
   const signedTx = await tx.sign().complete();
-  await signedTx.submit();
+  if (dryrun === false) await signedTx.submit();
   console.debug("Minted token with policy ID", policyId);
   return policyId;
 };
