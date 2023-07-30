@@ -35,6 +35,11 @@ jobs:
           BLOCKFROST_KEY: ${{ secrets.BLOCKFROST_PREVIEW_KEY }}
           WALLET_SEED: ${{ secrets.INTEGRATION_WALLET }}
 
+      - name: Create fake vault-cli
+        run: |
+          echo 'alias vault-cli="cat config/local.yml"' >> $HOME/.bashrc
+          source $HOME/.bashrc
+
       - name: Run tests
         run: npx ava
 
