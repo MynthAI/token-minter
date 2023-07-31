@@ -1,10 +1,2 @@
-*.addr
-*.draft
-*.raw
-*.signed
-*.skey
-*.vkey
-policy
-protocol.json
 build
 node_modules

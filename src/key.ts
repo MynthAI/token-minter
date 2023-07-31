@@ -9,12 +9,18 @@ const toCborHex = (rawPrivateKey: string) => {
   return "5820" + hexStr;
 };
 
-const toSkey = (cborHex: string) => {
-  return JSON.stringify({
-    type: "PaymentSigningKeyShelley_ed25519",
-    description: "Payment Signing Key",
-    cborHex: cborHex,
-  });
+const toSkey = (rawPrivateKey: string) => {
+  return (
+    JSON.stringify(
+      {
+        type: "PaymentSigningKeyShelley_ed25519",
+        description: "Payment Signing Key",
+        cborHex: toCborHex(rawPrivateKey),
+      },
+      null,
+      4
+    ) + "\n"
+  );
 };
 
-export { toCborHex };
+export { toCborHex, toSkey };
