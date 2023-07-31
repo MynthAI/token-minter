@@ -1,7 +1,13 @@
+import fs from "fs";
+import path, { dirname } from "path";
+import { fileURLToPath } from "url";
 import util from "util";
 import test from "ava";
 import config from "config";
 import { register } from "../metadata";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const readFile = util.promisify(fs.readFile);
 
 test("register function generates valid JSON metadata", async (t) => {
   const params = {
@@ -20,5 +26,16 @@ test("register function generates valid JSON metadata", async (t) => {
   };
 
   await register(params);
-  t.pass();
+  let filePath = path.join(
+    __dirname,
+    "assets/b65838793fd0e2b9416baa45defab2813c2653bd1ad8c2b0e30a2d884665617369626c65204d6f64756c6174696f6e.json"
+  );
+  const expectedContents = await readFile(filePath, "utf-8");
+  filePath = path.join(
+    __dirname,
+    "../../b65838793fd0e2b9416baa45defab2813c2653bd1ad8c2b0e30a2d884665617369626c65204d6f64756c6174696f6e.json"
+  );
+  const actualContents = await readFile(filePath, "utf-8");
+  t.is(expectedContents, actualContents);
+  await fs.promises.unlink(filePath);
 });
