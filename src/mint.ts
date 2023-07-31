@@ -50,6 +50,7 @@ const loadMintingPolicy = () => {
 interface Config {
   blockfrostApiKey: string;
   minterSeed: string;
+  ownerKey: string;
   token: {
     name: string;
     amount: bigint;
@@ -59,8 +60,7 @@ interface Config {
 const mint = async (config: Config, dryrun: boolean = true) => {
   console.log("Loading wallets");
   const minter = await loadLucid(config.minterSeed, config.blockfrostApiKey);
-  const ownerKey = minter.utils.generatePrivateKey();
-  const owner = await loadLucid(ownerKey, config.blockfrostApiKey);
+  const owner = await loadLucid(config.ownerKey, config.blockfrostApiKey);
 
   const [address, utxos] = await Promise.all([
     owner.wallet.address(),
@@ -89,7 +89,10 @@ const mint = async (config: Config, dryrun: boolean = true) => {
     .attachMintingPolicy(script)
     .complete();
 
-  const signedTx = await tx.signWithPrivateKey(ownerKey).sign().complete();
+  const signedTx = await tx
+    .signWithPrivateKey(config.ownerKey)
+    .sign()
+    .complete();
 
   if (dryrun === false) await signedTx.submit();
 

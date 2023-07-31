@@ -1,3 +1,6 @@
 token:
   name: Token Minter
   supply: 100
+wallets:
+  minter:
+  owner:
