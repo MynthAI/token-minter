@@ -1,6 +1,7 @@
 import { spawn } from "child_process";
 import fs from "fs";
 import { BlockFrostAPI } from "@blockfrost/blockfrost-js";
+import { toSkey } from "key";
 
 const spawnPromise = (
   command: string,
@@ -42,7 +43,15 @@ const savePolicyScript = async (blockfrostApiKey: string, policyId: string) => {
     projectId: blockfrostApiKey,
   });
   const policyScript = await blockfrost.scriptsJson(policyId);
-  await fs.promises.writeFile("policy.script", JSON.stringify(policyScript.json));
+  await fs.promises.writeFile(
+    "policy.script",
+    JSON.stringify(policyScript.json)
+  );
+};
+
+const savePolicyKey = async (ownerKey: string) => {
+  const skey = toSkey(ownerKey);
+  await fs.promises.writeFile("policy.skey", skey);
 };
 
 const createMetadata = async (
@@ -98,6 +107,14 @@ const register = async (config: Config) => {
     Math.floor(config.token.decimals).toString(),
     "--policy",
     "policy.script",
+  ]);
+
+  await savePolicyKey(config.ownerKey);
+  await spawnPromise("token-metadata-creator", [
+    "entry",
+    tokenId,
+    "-a",
+    "policy.skey",
   ]);
 };
 
