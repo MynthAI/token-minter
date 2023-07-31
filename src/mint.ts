@@ -4,6 +4,7 @@ import { fileURLToPath } from "url";
 import {
   Blockfrost,
   fromText,
+  getAddressDetails,
   Lucid,
   NativeScript,
   Network,
@@ -33,8 +34,8 @@ const loadLucid = async (wallet: string, blockfrostApiKey: string) => {
   return lucid;
 };
 
-const getKeyHash = (lucid: Lucid, address: string) => {
-  const { paymentCredential } = lucid.utils.getAddressDetails(address);
+const getKeyHash = (address: string) => {
+  const { paymentCredential } = getAddressDetails(address);
   invariant(paymentCredential);
   return paymentCredential.hash;
 };
@@ -72,7 +73,7 @@ const mint = async (config: Config, dryrun: boolean = true) => {
   console.debug("Creating minting policy");
   const mintingPolicy = loadMintingPolicy();
   invariant(mintingPolicy.scripts, "Minting policy is invalid");
-  const ownerHash = getKeyHash(owner, address);
+  const ownerHash = getKeyHash(address);
   const expiration = minter.utils.unixTimeToSlot(Date.now() + expiresIn);
   mintingPolicy.scripts[0].slot = expiration;
   mintingPolicy.scripts[1].keyHash = ownerHash;
@@ -100,4 +101,4 @@ const mint = async (config: Config, dryrun: boolean = true) => {
   return policyId;
 };
 
-export { mint };
+export { getKeyHash, loadLucid, mint };
