@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
     "baseUrl": "./src",
-    "target": "es5",
-    "module": "commonjs",
+    "target": "es2020",
+    "module": "es2022",
+    "moduleResolution": "Node",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,

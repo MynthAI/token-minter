@@ -1,1 +1,3 @@
-blockfrost:
+blockfrost: "{{ vault('token-minter/blockfrost').api_key }}"
+wallets:
+  minter: "{{ vault('token-minter/wallets').minter }}"
