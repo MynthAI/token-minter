@@ -9,7 +9,7 @@ const spawnPromise = (
   args: ReadonlyArray<string>
 ): Promise<void> => {
   return new Promise((resolve, reject) => {
-    const childProcess = spawn(command, args, { stdio: "inherit" });
+    const childProcess = spawn(command, args);
 
     childProcess.on("error", (error) => {
       reject(error);
@@ -138,6 +138,7 @@ const register = async (config: Config) => {
     "--policy",
     "policy.script",
   ]);
+  await fs.promises.unlink("policy.script");
 
   await savePolicyKey(config.ownerKey);
   await spawnPromise("token-metadata-creator", [
@@ -146,6 +147,7 @@ const register = async (config: Config) => {
     "-a",
     "policy.skey",
   ]);
+  await fs.promises.unlink("policy.skey");
   await spawnPromise("token-metadata-creator", [
     "entry",
     tokenId,
