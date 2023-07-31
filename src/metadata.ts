@@ -7,7 +7,7 @@ const spawnPromise = (
   args: ReadonlyArray<string>
 ): Promise<void> => {
   return new Promise((resolve, reject) => {
-    const childProcess = spawn(command, args);
+    const childProcess = spawn(command, args, { stdio: "inherit" });
 
     childProcess.on("error", (error) => {
       reject(error);
@@ -79,25 +79,7 @@ const register = async (config: Config) => {
   const tokenId =
     config.token.policyId + Buffer.from(config.token.name).toString("hex");
   await savePolicyScript(config.blockfrostApiKey, config.token.policyId);
-  await spawnPromise("token-metadata-creator", [
-    "entry",
-    "--init",
-    tokenId,
-    "--name",
-    "Null",
-    "--description",
-    "Null",
-    "--ticker",
-    "Null",
-    "--url",
-    "Null",
-    "--logo",
-    "n.png",
-    "--decimals",
-    "Null",
-    "--policy",
-    "policy.script",
-  ]);
+  await spawnPromise("token-metadata-creator", ["entry", "--init", tokenId]);
   await spawnPromise("token-metadata-creator", [
     "entry",
     "--init",
@@ -118,3 +100,5 @@ const register = async (config: Config) => {
     "policy.script",
   ]);
 };
+
+export { register };
