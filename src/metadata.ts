@@ -146,6 +146,11 @@ const register = async (config: Config) => {
     "-a",
     "policy.skey",
   ]);
+  await spawnPromise("token-metadata-creator", [
+    "entry",
+    tokenId,
+    "--finalize",
+  ]);
 };
 
 export { register };
