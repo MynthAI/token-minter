@@ -42,7 +42,7 @@ const savePolicyScript = async (blockfrostApiKey: string, policyId: string) => {
     projectId: blockfrostApiKey,
   });
   const policyScript = await blockfrost.scriptsJson(policyId);
-  await fs.promises.writeFile("policy.script", JSON.stringify(policyScript));
+  await fs.promises.writeFile("policy.script", JSON.stringify(policyScript.json));
 };
 
 const createMetadata = async (
