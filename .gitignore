@@ -6,3 +6,5 @@
 *.vkey
 policy
 protocol.json
+build
+node_modules
