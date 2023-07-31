@@ -29,10 +29,12 @@ jobs:
       - name: Inject secrets
         run: |
           sed -i "s|{{ vault('token-minter/blockfrost').api_key }}|$BLOCKFROST_KEY|g" config/local.yml.j2
+          sed -i "s|{{ vault('token-minter/wallets').owner }}|$OWNER_KEY|g" config/local.yml.j2
           sed -i "s|{{ vault('token-minter/wallets').minter }}|$WALLET_SEED|g" config/local.yml.j2
           mv config/local.yml.j2 config/local.yml
         env:
           BLOCKFROST_KEY: ${{ secrets.BLOCKFROST_PREVIEW_KEY }}
+          OWNER_KEY: ed25519_sk13644lrp7erfrqu3k5k29kv9stqzudfchxttem5773sef58s9yanspdnhlf
           WALLET_SEED: ${{ secrets.INTEGRATION_WALLET }}
 
       - name: Create fake vault-cli
