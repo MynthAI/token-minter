@@ -30,9 +30,13 @@ jobs:
         run: |
           # Download the pre-built binary for token-metadata-creator
           curl -LJO https://github.com/input-output-hk/offchain-metadata-tools/releases/download/v0.4.0.0/token-metadata-creator.tar.gz
+          # Extract the binary from the tar.gz file
+          tar -xzf token-metadata-creator.tar.gz
           # Make the binary executable
           chmod +x token-metadata-creator
-          # Move the binary to a directory specified by PATH (e.g., $HOME/.local/bin/)
+          # Create the directory if it doesn't exist
+          mkdir -p $HOME/.local/bin/
+          # Move the binary to the specified directory
           mv token-metadata-creator $HOME/.local/bin/
 
       - name: Inject secrets
