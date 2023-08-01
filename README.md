@@ -31,12 +31,12 @@ the blockchain.
 ### Vault
 
 This project uses Vault for secret storage. Secrets are stored under the
-path `cardano-monitor`. To activate this path in your
+path `token-minter`. To activate this path in your
 [local-vault](https://github.com/MynthAI/local-vault) instance, execute
 the following command:
 
 ``` bash
-docker exec vault vault secrets enable -path=cardano-monitor -version=1 kv
+docker exec vault vault secrets enable -path=token-minter -version=1 kv
 ```
 
 ### Blockfrost
@@ -62,7 +62,7 @@ faucet](https://docs.cardano.org/cardano-testnet/tools/faucet/). Here’s
 the method to save it to Vault:
 
 ``` bash
-vault-cli set -p token-minter/wallet minter
+vault-cli set -p token-minter/wallets minter
 ```
 
 ## Creating a Token Owner Wallet
@@ -87,7 +87,7 @@ The `token-metadata-creator` tool is responsible for asset/token metadata creati
 
 ## Creating a Token Metadata
 
-To generate metadata for your assets (tokens), make sure you have `tokenmetadatacreator` installed, and then follow these steps:
+To generate metadata for your assets (tokens), make sure you have `token-metadata-creator` installed, and then follow these steps:
 
 
 ``` bash
