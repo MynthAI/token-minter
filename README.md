@@ -83,7 +83,7 @@ details in this file to change the token you want to mint.
 
 ## Installing token-metadata-creator
 
-The `token-metadata-creator` tool is responsible for asset/token metadata creation and validation. To use it, you can download the pre-built binaries from the [releases](https://github.com/input-output-hk/offchain-metadata-tools#pre-built-binaries) section. Choose the appropriate binary for your platform and follow the installation instructions for your operating system. 
+The `token-metadata-creator` tool is responsible for asset/token metadata creation and validation. To use it, you can download the pre-built binaries from the [releases](https://github.com/input-output-hk/offchain-metadata-tools#pre-built-binaries) section. Choose the appropriate binary for your platform and follow the installation instructions for your operating system. Extract the downloaded archive and place the binary file in a directory specified by the PATH environment variable. For example, you can place it in `$HOME/.local/bin/` or any other directory included in the PATH.
 
 ## Creating a Token Metadata
 
