@@ -26,7 +26,12 @@ npm run start
 ```
 
 This will build a transaction to mint a token but will not submit it to
-the blockchain.
+the blockchain. To submit the transaction, set the `MINT` environment
+variable to `true`:
+
+``` bash
+MINT=true npm run start
+```
 
 ### Vault
 
