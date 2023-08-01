@@ -11,7 +11,9 @@ const run = () => {
 
   vaultProcess.stdout.on("data", (data) => {
     process.env.NODE_CONFIG = JSON.stringify(parse(data.toString()));
-    if (process.argv.includes("--test")) {
+    if (process.argv.includes("--generate-metadata")) {
+      generateMetadata();
+    } else if (process.argv.includes("--test")) {
       runTests();
     } else {
       runIndex();
@@ -33,6 +35,16 @@ const run = () => {
 const runIndex = () => {
   const command = "node";
   const args = ["--loader=tsx", "./src/index.ts"];
+
+  childProcess = spawn(command, args, {
+    stdio: "inherit",
+    shell: process.platform == "win32",
+  });
+};
+
+const generateMetadata = () => {
+  const command = "node";
+  const args = ["--loader=tsx", "./src/generate-metadata.ts"];
 
   childProcess = spawn(command, args, {
     stdio: "inherit",

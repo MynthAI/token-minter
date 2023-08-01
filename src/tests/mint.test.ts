@@ -3,7 +3,7 @@ import test from "ava";
 import config from "config";
 import { generatePrivateKey } from "lucid-cardano";
 import { generateUsername } from "unique-username-generator";
-import { mint } from "../mint";
+import { getKeyHash, loadLucid, mint } from "../mint";
 
 const randomSleep = async () => {
   const sleep = (ms: number) => {
@@ -16,13 +16,10 @@ const randomSleep = async () => {
 };
 
 const getAsset = async (
-  blockfrostApiKey: string,
+  blockfrost: BlockFrostAPI,
   policyId: string,
   name: string
 ) => {
-  const blockfrost = new BlockFrostAPI({
-    projectId: blockfrostApiKey,
-  });
   const assetId = policyId + Buffer.from(name).toString("hex");
   while (true) {
     try {
@@ -47,10 +44,22 @@ test("successfully mints a token", async (t) => {
   t.timeout(120000);
   const policyId = await mint(params, false);
 
-  const token = await getAsset(
-    params.blockfrostApiKey,
-    policyId,
-    params.token.name
-  );
+  const blockfrost = new BlockFrostAPI({
+    projectId: params.blockfrostApiKey,
+  });
+  const token = await getAsset(blockfrost, policyId, params.token.name);
   t.is(BigInt(token.quantity), params.token.amount);
+
+  const policyScript = await blockfrost.scriptsJson(policyId);
+  if (
+    !Array.isArray(policyScript.json.scripts) ||
+    policyScript.json.scripts.length <= 1
+  ) {
+    t.fail("Invalid policy ID");
+    return;
+  }
+  const keyHash = policyScript.json.scripts[1].keyHash;
+  const owner = await loadLucid(params.ownerKey, params.blockfrostApiKey);
+  const ownerAddress = await owner.wallet.address();
+  t.is(keyHash, getKeyHash(ownerAddress));
 });

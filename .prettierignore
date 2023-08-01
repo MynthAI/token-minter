@@ -1,3 +1,3 @@
 *.md
 build
-43b07d4037f0d75ee10f9863097463fc02ff3c0b8b705ae61d9c75bf4d796e746820546f6b656e.json
+src/tests/assets/*.json

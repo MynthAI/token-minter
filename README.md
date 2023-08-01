@@ -6,8 +6,8 @@ This project includes a tool to mint Cardano native tokens. It utilizes
 
 ## Prerequisites
 
-  - Node.js (v18.16.1)
-  - npm (v9.7.2 or later)
+- Node.js (v18.16.1)
+- npm (v9.7.2 or later)
 
 ## Development
 
@@ -31,12 +31,12 @@ the blockchain.
 ### Vault
 
 This project uses Vault for secret storage. Secrets are stored under the
-path `cardano-monitor`. To activate this path in your
+path `token-minter`. To activate this path in your
 [local-vault](https://github.com/MynthAI/local-vault) instance, execute
 the following command:
 
 ``` bash
-docker exec vault vault secrets enable -path=cardano-monitor -version=1 kv
+docker exec vault vault secrets enable -path=token-minter -version=1 kv
 ```
 
 ### Blockfrost
@@ -62,7 +62,7 @@ faucet](https://docs.cardano.org/cardano-testnet/tools/faucet/). Here’s
 the method to save it to Vault:
 
 ``` bash
-vault-cli set -p token-minter/wallet minter
+vault-cli set -p token-minter/wallets minter
 ```
 
 ## Creating a Token Owner Wallet
@@ -80,3 +80,24 @@ npm run generate-owner
 This repository allows minting of any token. You can configure what
 token to mint by modifying the `config/default.yml` file. Update the
 details in this file to change the token you want to mint.
+
+## Installing token-metadata-creator
+
+The `token-metadata-creator` tool is responsible for asset/token
+metadata creation and validation. To use it, you can download the
+pre-built binaries from the
+[releases](https://github.com/input-output-hk/offchain-metadata-tools#pre-built-binaries)
+section. Choose the appropriate binary for your platform and follow the
+installation instructions for your operating system. Extract the
+downloaded archive and place the binary file in a directory specified by
+the PATH environment variable. For example, you can place it in
+`$HOME/.local/bin/` or any other directory included in the PATH.
+
+## Creating a Token Metadata
+
+To generate metadata for your assets (tokens), make sure you have
+`token-metadata-creator` installed, and then follow these steps:
+
+``` bash
+npm run generate-metadata
+```
