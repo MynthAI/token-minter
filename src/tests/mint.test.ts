@@ -1,6 +1,7 @@
 import { BlockFrostAPI } from "@blockfrost/blockfrost-js";
 import test from "ava";
 import config from "config";
+import { generatePrivateKey } from "lucid-cardano";
 import { generateUsername } from "unique-username-generator";
 import { mint } from "../mint";
 
@@ -36,6 +37,7 @@ test("successfully mints a token", async (t) => {
   const params = {
     blockfrostApiKey: config.get<string>("blockfrost"),
     minterSeed: config.get<string>("wallets.minter"),
+    ownerKey: generatePrivateKey(),
     token: {
       name: generateUsername(),
       amount: BigInt(Math.random().toString().slice(2)),

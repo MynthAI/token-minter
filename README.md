@@ -65,6 +65,16 @@ the method to save it to Vault:
 vault-cli set -p token-minter/wallet minter
 ```
 
+## Creating a Token Owner Wallet
+
+You need an owner wallet to mint a token. This wallet is authorized to
+mint the token and serves as proof of its creator. Follow the steps
+below to create an owner wallet and store it in the Vault:
+
+``` bash
+npm run generate-owner
+```
+
 ## Configuring the Token
 
 This repository allows minting of any token. You can configure what
