@@ -8,6 +8,7 @@
   },
   "scripts": {
     "generate-owner": "node --loader=tsx src/generate.ts",
+    "generate-metadata": "node --loader=tsx src/metadata.ts",
     "start": "node dev.js",
     "build": "npx tsc",
     "test": "node dev.js --test",

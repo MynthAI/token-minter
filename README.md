@@ -80,3 +80,16 @@ npm run generate-owner
 This repository allows minting of any token. You can configure what
 token to mint by modifying the `config/default.yml` file. Update the
 details in this file to change the token you want to mint.
+
+## Installing token-metadata-creator
+
+The `token-metadata-creator` tool is responsible for asset/token metadata creation and validation. To use it, you can download the pre-built binaries from the [releases](https://github.com/input-output-hk/offchain-metadata-tools#pre-built-binaries) section. Choose the appropriate binary for your platform and follow the installation instructions for your operating system. 
+
+## Creating a Token Metadata
+
+To generate metadata for your assets (tokens), make sure you have `tokenmetadatacreator` installed, and then follow these steps:
+
+
+``` bash
+npm run generate-metadata
+```
