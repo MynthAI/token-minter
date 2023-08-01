@@ -12,7 +12,7 @@ const run = async () => {
     },
   };
 
-  const shouldMint = process.argv.includes("--mint");
+  const shouldMint = process.env.MINT === "true";
   await mint(params, !shouldMint);
 };
 
