@@ -82,9 +82,9 @@ const mint = async (config: Config, dryrun: boolean = true) => {
   const script = minter.utils.nativeScriptFromJson(mintingPolicy);
   const policyId = minter.utils.mintingPolicyToId(script);
   const units: Record<string, bigint> = {};
-  for (const token of config.tokens) {
+  config.tokens.forEach((token) => {
     units[policyId + fromText(token.name)] = token.amount;
-  }
+  });
 
   console.debug("Building transaction");
   const tx = await minter

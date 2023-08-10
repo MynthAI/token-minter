@@ -11,16 +11,12 @@ type Token = {
   url: string;
 };
 
-type Tokens = {
-  [ticker: string]: Token;
-};
-
 const generateMetadata = async () => {
   const params = {
     blockfrostApiKey: config.get<string>("blockfrost"),
     ownerKey: config.get<string>("wallets.owner"),
   };
-  const tokens = config.get<Tokens>("tokens");
+  const tokens = config.get<Record<string, Token>>("tokens");
 
   for (const ticker in tokens) {
     const token = tokens[ticker];
