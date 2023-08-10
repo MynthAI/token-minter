@@ -11,16 +11,14 @@ const run = async () => {
     blockfrostApiKey: config.get<string>("blockfrost"),
     minterSeed: config.get<string>("wallets.minter"),
     ownerKey: config.get<string>("wallets.owner"),
-    tokens: [],
+    tokens: Object.values(config.get<Record<string, Token>>("tokens")).map(
+      (token) => ({
+        name: token.name,
+        amount: token.supply,
+      })
+    ),
   };
   const shouldMint = process.env.MINT === "true";
-
-  const tokens = Object.values(config.get<Record<string, Token>>("tokens")).map(
-    (token) => ({
-      name: token.name,
-      amount: token.supply,
-    })
-  );
 
   await mint(params, !shouldMint);
 };
