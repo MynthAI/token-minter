@@ -1,22 +1,38 @@
 import config from "config";
 import { register } from "metadata";
 
+type Token = {
+  decimals: number;
+  description: string;
+  logo: string;
+  name: string;
+  policyId: string;
+  ticker: string;
+  url: string;
+};
+
 const generateMetadata = async () => {
-  const configData = {
+  const params = {
     blockfrostApiKey: config.get<string>("blockfrost"),
     ownerKey: config.get<string>("wallets.owner"),
-    token: {
-      decimals: config.get<number>("token.supply"),
-      description: config.get<string>("token.description"),
-      logo: config.get<string>("token.logo"),
-      name: config.get<string>("token.name"),
-      policyId: config.get<string>("token.policyId"),
-      ticker: config.get<string>("token.ticker"),
-      url: config.get<string>("token.url"),
-    },
   };
+  const tokens = config.get<Record<string, Token>>("tokens");
 
-  await register(configData);
+  for (const ticker in tokens) {
+    const token = tokens[ticker];
+    await register({
+      ...params,
+      token: {
+        decimals: token.decimals,
+        description: token.description,
+        logo: token.logo,
+        name: token.name,
+        policyId: token.policyId,
+        ticker: token.ticker,
+        url: token.url,
+      },
+    });
+  }
 };
 
 generateMetadata();

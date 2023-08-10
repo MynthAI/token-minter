@@ -48,14 +48,16 @@ const loadMintingPolicy = () => {
   return jsonData;
 };
 
+interface Token {
+  name: string;
+  amount: bigint;
+}
+
 interface Config {
   blockfrostApiKey: string;
   minterSeed: string;
   ownerKey: string;
-  token: {
-    name: string;
-    amount: bigint;
-  };
+  tokens: Token[];
 }
 
 const mint = async (config: Config, dryrun: boolean = true) => {
@@ -79,12 +81,15 @@ const mint = async (config: Config, dryrun: boolean = true) => {
   mintingPolicy.scripts[1].keyHash = ownerHash;
   const script = minter.utils.nativeScriptFromJson(mintingPolicy);
   const policyId = minter.utils.mintingPolicyToId(script);
-  const unit = policyId + fromText(config.token.name);
+  const units: Record<string, bigint> = {};
+  config.tokens.forEach((token) => {
+    units[policyId + fromText(token.name)] = token.amount;
+  });
 
   console.debug("Building transaction");
   const tx = await minter
     .newTx()
-    .mintAssets({ [unit]: config.token.amount })
+    .mintAssets(units)
     .validTo(Date.now() + expiresIn)
     .addSignerKey(ownerHash)
     .attachMintingPolicy(script)

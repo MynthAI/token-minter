@@ -1,12 +1,12 @@
-token:
-  supply: 100
-  name: Mynth Token
-  ticker: MNT
-  description: Mynth enables cross-chain swaps that connect Cardano to the real world, empowering users to make the most of Cardano and other blockchains.
-  url: https://mynth.ai
-  logo: mynth-logo.png
-  decimals: 6
-  policyId: b65838793fd0e2b9416baa45defab2813c2653bd1ad8c2b0e30a2d88
+tokens:
+  MNT:
+    supply: 100
+    name: Mynth Token
+    description: Mynth enables cross-chain swaps that connect Cardano to the real world, empowering users to make the most of Cardano and other blockchains.
+    url: https://mynth.ai
+    logo: mynth-logo.png
+    decimals: 6
+    policyId: b65838793fd0e2b9416baa45defab2813c2653bd1ad8c2b0e30a2d88
 wallets:
   minter:
   owner:
