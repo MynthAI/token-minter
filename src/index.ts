@@ -15,23 +15,17 @@ const run = async () => {
     blockfrostApiKey: config.get<string>("blockfrost"),
     minterSeed: config.get<string>("wallets.minter"),
     ownerKey: config.get<string>("wallets.owner"),
+    tokens: [],
   };
-  const tokens = config.get<Tokens>("tokens");
   const shouldMint = process.env.MINT === "true";
 
-  for (const ticker in tokens) {
-    const token = tokens[ticker];
-    await mint(
-      {
-        ...params,
-        token: {
-          name: token.name,
-          amount: token.supply,
-        },
-      },
-      !shouldMint
-    );
+  const tokens = [];
+  for (const ticker in config.get<Tokens>("tokens")) {
+    const token = config.get<Tokens>("tokens")[ticker];
+    tokens.push({ name: token.name, amount: token.supply });
   }
+
+  await mint(params, !shouldMint);
 };
 
 run();

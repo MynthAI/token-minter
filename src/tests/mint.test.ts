@@ -35,10 +35,12 @@ test("successfully mints a token", async (t) => {
     blockfrostApiKey: config.get<string>("blockfrost"),
     minterSeed: config.get<string>("wallets.minter"),
     ownerKey: generatePrivateKey(),
-    token: {
-      name: generateUsername(),
-      amount: BigInt(Math.random().toString().slice(2)),
-    },
+    tokens: [
+      {
+        name: generateUsername(),
+        amount: BigInt(Math.random().toString().slice(2)),
+      },
+    ],
   };
 
   t.timeout(120000);
@@ -47,8 +49,8 @@ test("successfully mints a token", async (t) => {
   const blockfrost = new BlockFrostAPI({
     projectId: params.blockfrostApiKey,
   });
-  const token = await getAsset(blockfrost, policyId, params.token.name);
-  t.is(BigInt(token.quantity), params.token.amount);
+  const token = await getAsset(blockfrost, policyId, params.tokens[0].name);
+  t.is(BigInt(token.quantity), params.tokens[0].amount);
 
   const policyScript = await blockfrost.scriptsJson(policyId);
   if (
