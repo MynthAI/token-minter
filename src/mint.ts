@@ -65,12 +65,13 @@ const mint = async (config: Config, dryrun: boolean = true) => {
   const minter = await loadLucid(config.minterSeed, config.blockfrostApiKey);
   const owner = await loadLucid(config.ownerKey, config.blockfrostApiKey);
 
-  const [address, utxos] = await Promise.all([
+  const [address, utxos, minterAddress] = await Promise.all([
     owner.wallet.address(),
     minter.wallet.getUtxos(),
+    minter.wallet.address(),
   ]);
 
-  invariant(utxos.length, `${address} needs to be funded`);
+  invariant(utxos.length, `${minterAddress} needs to be funded`);
 
   console.debug("Creating minting policy");
   const mintingPolicy = loadMintingPolicy();
