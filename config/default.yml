@@ -4,7 +4,7 @@ tokens:
     name: MyUSD
     description: Collaterlized Cardano native stablecoinn redeemable for USDT using Mynth.
     url: https://mynth.ai
-    logo: mynth-logo.png
+    logo: myusd.png
     decimals: 6
     policyId: 92776616f1f32c65a173392e4410a3d8c39dcf6ef768c73af164779c
 wallets:
