@@ -1,6 +1,5 @@
 import { spawn } from "child_process";
 import fs from "fs";
-import { BlockFrostAPI } from "@blockfrost/blockfrost-js";
 import { toSkey } from "key";
 import { getKeyHash, loadLucid } from "mint";
 
@@ -26,7 +25,6 @@ const spawnPromise = (
 };
 
 interface Config {
-  blockfrostApiKey: string;
   ownerKey: string;
   token: {
     decimals: number;
@@ -38,42 +36,6 @@ interface Config {
     url: string;
   };
 }
-
-const savePolicyScript = async (
-  blockfrostApiKey: string,
-  policyId: string,
-  ownerKey: string
-) => {
-  const blockfrost = new BlockFrostAPI({
-    projectId: blockfrostApiKey,
-  });
-  const policyScript = await blockfrost.scriptsJson(policyId);
-
-  const owner = await loadLucid(ownerKey, blockfrostApiKey);
-  const ownerAddress = await owner.wallet.address();
-  const ownerKeyHash = getKeyHash(ownerAddress);
-
-  if (
-    !Array.isArray(policyScript.json.scripts) ||
-    policyScript.json.scripts.length <= 1
-  ) {
-    throw new Error("Invalid policy ID");
-  }
-
-  if (policyScript.json.scripts[1].keyHash != ownerKeyHash) {
-    console.error(
-      "Key mismatch:",
-      policyScript.json.scripts[1].keyHash,
-      ownerKeyHash
-    );
-    throw new Error("Owner did not create token");
-  }
-
-  await fs.promises.writeFile(
-    "policy.script",
-    JSON.stringify(policyScript.json)
-  );
-};
 
 const savePolicyKey = async (ownerKey: string) => {
   const skey = toSkey(ownerKey);
@@ -113,11 +75,6 @@ const createMetadata = async (
 const register = async (config: Config) => {
   const tokenId =
     config.token.policyId + Buffer.from(config.token.name).toString("hex");
-  await savePolicyScript(
-    config.blockfrostApiKey,
-    config.token.policyId,
-    config.ownerKey
-  );
   await spawnPromise("token-metadata-creator", ["entry", "--init", tokenId]);
   await spawnPromise("token-metadata-creator", [
     "entry",
@@ -135,10 +92,7 @@ const register = async (config: Config) => {
     config.token.logo,
     "--decimals",
     Math.floor(config.token.decimals).toString(),
-    "--policy",
-    "policy.script",
   ]);
-  await fs.promises.unlink("policy.script");
 
   await savePolicyKey(config.ownerKey);
   await spawnPromise("token-metadata-creator", [
