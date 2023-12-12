@@ -1,12 +1,12 @@
 tokens:
-  MNT:
+  MyUSD:
     supply: 100
-    name: Mynth Token
-    description: Mynth enables cross-chain swaps that connect Cardano to the real world, empowering users to make the most of Cardano and other blockchains.
+    name: MyUSD
+    description: Collaterlized Cardano native stablecoinn redeemable for USDT using Mynth.
     url: https://mynth.ai
     logo: mynth-logo.png
     decimals: 6
-    policyId: b65838793fd0e2b9416baa45defab2813c2653bd1ad8c2b0e30a2d88
+    policyId: 91d4f382273f442f15e9da48cb23349ba275f8818e4c7ac5d1004a16
 wallets:
   minter:
   owner:
