@@ -6,7 +6,7 @@ tokens:
     url: https://mynth.ai
     logo: mynth-logo.png
     decimals: 6
-    policyId: 0c6e170c9dc52bae251312ef4abeb27a0d837899b539c2f3b44afef3
+    policyId: 92776616f1f32c65a173392e4410a3d8c39dcf6ef768c73af164779c
 wallets:
   minter:
   owner:
