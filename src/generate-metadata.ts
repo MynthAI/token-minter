@@ -2,10 +2,11 @@ import config from "config";
 import { register } from "metadata";
 
 type Token = {
+  assetName: string;
   decimals: number;
   description: string;
   logo: string;
-  name: string;
+  name: string | undefined;
   policyId: string;
   url: string;
 };
@@ -22,10 +23,11 @@ const generateMetadata = async () => {
     await register({
       ...params,
       token: {
+        assetName: token.assetName,
         decimals: token.decimals,
         description: token.description,
         logo: token.logo,
-        name: token.name,
+        name: token.name || token.assetName,
         policyId: token.policyId,
         ticker: ticker,
         url: token.url,

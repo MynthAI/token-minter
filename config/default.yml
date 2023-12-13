@@ -1,7 +1,7 @@
 tokens:
   MNT:
     supply: 100
-    name: Mynth Token
+    assetName: Mynth Token
     description: Mynth enables cross-chain swaps that connect Cardano to the real world, empowering users to make the most of Cardano and other blockchains.
     url: https://mynth.ai
     logo: mynth-logo.png

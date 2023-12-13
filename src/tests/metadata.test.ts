@@ -15,6 +15,7 @@ test("register function generates valid JSON metadata", async (t) => {
     ownerKey:
       "ed25519_sk1kla9j97tjzyjgc557kelaa2zzp7j04404395kruarax7lnk9ma3qvxnj6j",
     token: {
+      assetName: "Feasible Modulation",
       decimals: 4,
       description: "Just some random test token",
       logo: "mynth-logo.png",

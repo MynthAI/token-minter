@@ -29,6 +29,7 @@ interface Config {
   blockfrostApiKey: string;
   ownerKey: string;
   token: {
+    assetName: string;
     decimals: number;
     description: string;
     logo: string;
@@ -112,7 +113,7 @@ const createMetadata = async (
 
 const register = async (config: Config) => {
   const tokenId =
-    config.token.policyId + Buffer.from(config.token.name).toString("hex");
+    config.token.policyId + Buffer.from(config.token.assetName).toString("hex");
   await savePolicyScript(
     config.blockfrostApiKey,
     config.token.policyId,
