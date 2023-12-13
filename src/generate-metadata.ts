@@ -7,7 +7,6 @@ type Token = {
   logo: string;
   name: string;
   policyId: string;
-  ticker: string;
   url: string;
 };
 
@@ -28,7 +27,7 @@ const generateMetadata = async () => {
         logo: token.logo,
         name: token.name,
         policyId: token.policyId,
-        ticker: token.ticker,
+        ticker: ticker,
         url: token.url,
       },
     });
